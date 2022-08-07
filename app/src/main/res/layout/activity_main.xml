@@ -1,70 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <Button
-        android:id="@+id/button_toast"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:onClick="showToast"
-        android:text="@string/button_label_toast"
-        android:textColor="@color/white"
-        app:cornerRadius="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button_zero"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:backgroundTint="@android:color/darker_gray"
-        android:onClick="setZeroCount"
-        android:text="@string/button_label_zero"
-        android:textColor="@color/white"
-        app:cornerRadius="0dp"
-        app:layout_constraintEnd_toEndOf="@id/button_toast"
-        app:layout_constraintStart_toStartOf="@id/button_toast"
-        app:layout_constraintTop_toBottomOf="@id/button_toast" />
-
-    <Button
-        android:id="@+id/button_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/show_count"
-        android:layout_marginVertical="8dp"
-        android:backgroundTint="#0000FF"
-        android:onClick="countUp"
-        android:text="@string/button_label_count"
-        android:textColor="@color/white"
-        app:cornerRadius="0dp"
-        app:layout_constraintEnd_toEndOf="@id/button_toast"
-        app:layout_constraintStart_toStartOf="@id/button_toast"
-        app:layout_constraintTop_toBottomOf="@id/button_zero" />
+    tools:context="com.example.helloworld.MainActivity">
 
     <TextView
-        android:id="@+id/show_count"
-        android:layout_width="0dp"
+        android:id="@+id/article_heading"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="#FFFF00"
-        android:gravity="center"
-        android:text="@string/count_initial_value"
-        android:textColor="@color/purple_500"
-        android:textSize="160sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/button_toast"
-        app:layout_constraintTop_toTopOf="@id/button_toast" />
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/padding_regular"
+        android:text="@string/article_title"
+        android:textAppearance=
+            "@android:style/TextAppearance.DeviceDefault.Large"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/article_heading">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/article_subheading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_regular"
+                android:text="@string/article_subtitle"
+                android:textAppearance=
+                    "@android:style/TextAppearance.DeviceDefault" />
+
+            <TextView
+                android:id="@+id/article"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:lineSpacingExtra="@dimen/line_spacing"
+                android:padding="@dimen/padding_regular"
+                android:text="@string/article_text" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
