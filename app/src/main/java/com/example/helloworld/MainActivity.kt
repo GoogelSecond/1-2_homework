@@ -1,107 +1,59 @@
 package com.example.helloworld
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ShareCompat
 
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var replyHeadTextView: TextView
-    private lateinit var replyTextView: TextView
-
-    private lateinit var messageEditText: EditText
+    private lateinit var webSiteEditText: EditText
+    private lateinit var locationEditText: EditText
+    private lateinit var shareTextEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d(LOG_TAG, "-------")
-        Log.d(LOG_TAG, "onCreate")
-
         setContentView(R.layout.activity_main)
-        messageEditText = findViewById(R.id.editText_main)
-        replyHeadTextView = findViewById(R.id.text_header_reply)
-        replyTextView = findViewById(R.id.text_message_reply)
+        webSiteEditText = findViewById(R.id.website_edittext)
+        locationEditText = findViewById(R.id.location_edittext)
+        shareTextEditText = findViewById(R.id.share_edittext)
+    }
 
-        if (savedInstanceState != null) {
-            val isVisible = savedInstanceState.getBoolean("reply_visible")
-            if (isVisible) {
-                replyHeadTextView.visibility = View.VISIBLE
-                replyTextView.text = savedInstanceState.getString("reply_text")
-                replyTextView.visibility = View.VISIBLE
-            }
+    fun openWebsite(view: View) {
+        val url = webSiteEditText.text.toString()
+        val webPage = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, webPage)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            Log.d("ImplicitIntents", "Can't handle this intent!")
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        if (replyHeadTextView.visibility == View.VISIBLE) {
-            outState.putBoolean("reply_visible", true)
-            outState.putString("reply_text", replyHeadTextView.text.toString())
+    fun openLocation(view: View) {
+        val loc = locationEditText.text.toString()
+        val addressUri = Uri.parse("geo:0,0?q=" + loc)
+        val intent = Intent(Intent.ACTION_VIEW, addressUri)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            Log.d("ImplicitIntents", "Can't handle this intent!")
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(LOG_TAG, "onStart")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d(LOG_TAG, "onPause")
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.d(LOG_TAG, "onRestart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(LOG_TAG, "onResume")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(LOG_TAG, "onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(LOG_TAG, "onDestroy")
-    }
-
-
-    fun launchSecondActivity(view: View) {
-        Log.d(LOG_TAG, "Button clicked!")
-        val message = messageEditText.text.toString()
-        val intent = Intent(this, SecondActivity::class.java)
-        intent.putExtra(EXTRA_MESSAGE, message)
-        startActivityForResult(intent, TEXT_REQUEST)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == TEXT_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                val reply = data?.getStringExtra(SecondActivity.EXTRA_REPLY)
-                replyHeadTextView.setVisibility(View.VISIBLE)
-                replyTextView.setText(reply)
-                replyTextView.setVisibility(View.VISIBLE)
-            }
-        }
-    }
-
-    companion object {
-        private val LOG_TAG = MainActivity::class.java.simpleName
-
-        const val EXTRA_MESSAGE = "com.example.helloworld.extra.MESSAGE"
-
-        const val TEXT_REQUEST = 1
+    fun shareText(view: View) {
+        val txt = shareTextEditText.text.toString()
+        val mimeType = "text/plain"
+        ShareCompat.IntentBuilder
+            .from(this)
+            .setType(mimeType)
+            .setChooserTitle("Share this text with: ")
+            .setText(txt)
+            .startChooser()
     }
 }
