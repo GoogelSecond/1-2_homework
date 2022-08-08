@@ -2,6 +2,7 @@ package com.example.helloworld
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -18,11 +19,63 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.d(LOG_TAG, "-------")
+        Log.d(LOG_TAG, "onCreate")
+
         setContentView(R.layout.activity_main)
         messageEditText = findViewById(R.id.editText_main)
         replyHeadTextView = findViewById(R.id.text_header_reply)
         replyTextView = findViewById(R.id.text_message_reply)
+
+        if (savedInstanceState != null) {
+            val isVisible = savedInstanceState.getBoolean("reply_visible")
+            if (isVisible) {
+                replyHeadTextView.visibility = View.VISIBLE
+                replyTextView.text = savedInstanceState.getString("reply_text")
+                replyTextView.visibility = View.VISIBLE
+            }
+        }
     }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        if (replyHeadTextView.visibility == View.VISIBLE) {
+            outState.putBoolean("reply_visible", true)
+            outState.putString("reply_text", replyHeadTextView.text.toString())
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(LOG_TAG, "onStart")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(LOG_TAG, "onPause")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.d(LOG_TAG, "onRestart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(LOG_TAG, "onResume")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(LOG_TAG, "onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(LOG_TAG, "onDestroy")
+    }
+
 
     fun launchSecondActivity(view: View) {
         Log.d(LOG_TAG, "Button clicked!")
@@ -36,10 +89,10 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == TEXT_REQUEST) {
             if (resultCode == RESULT_OK) {
-                val reply = data?.getStringExtra(SecondActivity.EXTRA_REPLY);
-                replyHeadTextView.setVisibility(View.VISIBLE);
-                replyTextView.setText(reply);
-                replyTextView.setVisibility(View.VISIBLE);
+                val reply = data?.getStringExtra(SecondActivity.EXTRA_REPLY)
+                replyHeadTextView.setVisibility(View.VISIBLE)
+                replyTextView.setText(reply)
+                replyTextView.setVisibility(View.VISIBLE)
             }
         }
     }
